@@ -24,7 +24,6 @@ if (!defined('DS')) {
 
 // Path constants to a few helpful things.
 define('ROOT', dirname(__DIR__) . DS);
-define('CAKE_CORE_INCLUDE_PATH', ROOT . 'vendor' . DS . 'cakephp' . DS . 'cakephp');
 define('CORE_PATH', ROOT . 'vendor' . DS . 'cakephp' . DS . 'cakephp' . DS);
 define('CAKE', CORE_PATH . 'src' . DS);
 define('TESTS', ROOT . 'tests' . DS);
@@ -34,7 +33,8 @@ define('LOGS', TMP . 'logs' . DS);
 safe_mkdir(TMP);
 safe_mkdir(LOGS);
 
-require CORE_PATH . 'config' . DS . 'bootstrap.php';
+require_once CORE_PATH . 'config' . DS . 'bootstrap.php';
+loadPHPUnitAliases();
 
 date_default_timezone_set('UTC');
 mb_internal_encoding('UTF-8');
