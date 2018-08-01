@@ -147,8 +147,8 @@ TRACE;
             $this->assertRegExp('/^[\d-:\s]{19} (Critical|Error)/', $log->full);
         }
 
-        $this->assertFilePerms(LOGS . 'error.log', ['0644', '0664']);
-        $this->assertFilePerms(LOGS . 'error_serialized.log', ['0644', '0664']);
+        $this->assertFilePerms(LOGS . 'error.log', ['0644', '0664', '0666']);
+        $this->assertFilePerms(LOGS . 'error_serialized.log', ['0644', '0664', '0666']);
 
         //Deletes all logs, drops and reconfigure adding `mask` option
         safe_unlink_recursive(LOGS);
