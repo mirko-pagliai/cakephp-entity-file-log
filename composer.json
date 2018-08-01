@@ -1,0 +1,25 @@
+{
+    "name": "mirko-pagliai/cakephp-entity-file-log",
+    "description": "A log adapter that writes log (as entities) files",
+    "homepage": "https://github.com/mirko-pagliai/cakephp-entity-file-log",
+    "type": "cakephp-plugin",
+    "license": "MIT",
+    "authors": [{
+        "name": "Mirko Pagliai",
+        "email": "mirko.pagliai@gmail.com"
+    }],
+    "require": {
+        "php": ">=5.5.9",
+        "cakephp/cakephp": "^3.6",
+        "mirko-pagliai/php-tools": "^1.1"
+    },
+    "require-dev": {
+        "cakephp/cakephp-codesniffer": "^3.0",
+        "phpunit/phpunit": "^5.7|^6.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "EntityFileLog\\": "src"
+        }
+    }
+}
