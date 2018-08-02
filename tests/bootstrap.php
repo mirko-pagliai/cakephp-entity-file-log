@@ -34,7 +34,7 @@ safe_mkdir(TMP);
 safe_mkdir(LOGS);
 
 require_once CORE_PATH . 'config' . DS . 'bootstrap.php';
-loadPHPUnitAliases();
+require_once CORE_PATH . 'tests' . DS . 'phpunit_aliases.php';
 
 date_default_timezone_set('UTC');
 mb_internal_encoding('UTF-8');
