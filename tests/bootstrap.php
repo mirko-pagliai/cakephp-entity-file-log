@@ -34,6 +34,7 @@ safe_mkdir(TMP);
 safe_mkdir(LOGS);
 
 require_once CORE_PATH . 'config' . DS . 'bootstrap.php';
+
 loadPHPUnitAliases();
 
 date_default_timezone_set('UTC');
