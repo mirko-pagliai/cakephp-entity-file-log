@@ -147,11 +147,21 @@ TRACE;
             $this->assertRegExp('/^[\d-:\s]{19} (Critical|Error)/', $log->full);
         }
 
-        $this->assertFilePerms(LOGS . 'error.log', ['0644', '0664', '0666']);
-        $this->assertFilePerms(LOGS . 'error_serialized.log', ['0644', '0664', '0666']);
+        if (is_win()) {
+            $this->markTestSkipped();
+        }
 
-        //Deletes all logs, drops and reconfigure adding `mask` option
-        safe_unlink_recursive(LOGS);
+        $this->assertFilePerms(LOGS . 'error.log', ['0644', '0664']);
+        $this->assertFilePerms(LOGS . 'error_serialized.log', ['0644', '0664']);
+    }
+
+    /**
+     * Test for `log()` method, with a different `mask` value
+     * @test
+     */
+    public function testLogWithDifferentMask()
+    {
+        //Drops and reconfigure adding `mask` option
         $oldConfig = Log::getConfig('error');
         Log::drop('error');
         Log::setConfig('error', $oldConfig + ['mask' => 0777]);
@@ -159,16 +169,15 @@ TRACE;
         //Writes some logs
         $this->writeSomeLogs();
 
-        $this->assertContains('Error: This is an error message', file_get_contents(LOGS . 'error.log'));
-        $this->assertContains('Critical: This is a critical message', file_get_contents(LOGS . 'error.log'));
+        Log::drop('error');
+        Log::setConfig('error', $oldConfig);
 
-        $this->assertNotEmpty(file_get_contents(LOGS . 'error_serialized.log'));
+        if (is_win()) {
+            $this->markTestSkipped();
+        }
 
         $this->assertFilePerms(LOGS . 'error.log', '0777');
         $this->assertFilePerms(LOGS . 'error_serialized.log', '0777');
-
-        Log::drop('error');
-        Log::setConfig('error', $oldConfig);
     }
 
     /**
