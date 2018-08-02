@@ -34,7 +34,10 @@ safe_mkdir(TMP);
 safe_mkdir(LOGS);
 
 require_once CORE_PATH . 'config' . DS . 'bootstrap.php';
-require_once CORE_PATH . 'tests' . DS . 'phpunit_aliases.php';
+
+if (class_exists('PHPUnit_Runner_Version') && !class_exists('PHPUnit_Framework_Test') && class_exists('PHPUnit_Framework_TestCase')) {
+    class_alias('PHPUnit_Framework_Error_Warning', 'PHPUnit\Framework\Error\Warning');
+}
 
 date_default_timezone_set('UTC');
 mb_internal_encoding('UTF-8');
