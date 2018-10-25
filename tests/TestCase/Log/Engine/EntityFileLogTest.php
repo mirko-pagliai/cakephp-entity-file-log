@@ -12,6 +12,8 @@
  */
 namespace EntityFileLog\Test\TestCase\Log\Engine;
 
+use Cake\Core\Configure;
+use Cake\Core\Plugin;
 use Cake\Http\BaseApplication;
 use Cake\Log\Log;
 use Cake\TestSuite\TestCase;
@@ -46,8 +48,12 @@ class EntityFileLogTest extends TestCase
     {
         parent::setUp();
 
-        $app = $this->getMockForAbstractClass(BaseApplication::class, ['']);
-        $app->addPlugin('EntityFileLog')->pluginBootstrap();
+        if (version_compare(Configure::version(), '3.6', '>=')) {
+            $app = $this->getMockForAbstractClass(BaseApplication::class, ['']);
+            $app->addPlugin('EntityFileLog')->pluginBootstrap();
+        } else {
+            Plugin::load('EntityFileLog', ['bootstrap' => false, 'path' => ROOT]);
+        }
     }
 
     /**
@@ -177,15 +183,15 @@ TRACE;
     public function testLogWithDifferentMask()
     {
         //Drops and reconfigure adding `mask` option
-        $oldConfig = Log::getConfig('error');
+        $oldConfig = Log::config('error');
         Log::drop('error');
-        Log::setConfig('error', $oldConfig + ['mask' => 0777]);
+        Log::config('error', $oldConfig + ['mask' => 0777]);
 
         //Writes some logs
         $this->writeSomeLogs();
 
         Log::drop('error');
-        Log::setConfig('error', $oldConfig);
+        Log::config('error', $oldConfig);
 
         if (is_win()) {
             $this->markTestSkipped();

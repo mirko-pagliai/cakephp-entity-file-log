@@ -10,7 +10,6 @@
  * @link        https://github.com/mirko-pagliai/cakephp-entity-file-log
  * @license     https://opensource.org/licenses/mit-license.php MIT License
  */
-use Cake\Core\Plugin;
 use Cake\Log\Log;
 use EntityFileLog\Log\Engine\EntityFileLog;
 
@@ -35,12 +34,18 @@ safe_mkdir(LOGS);
 
 require_once CORE_PATH . 'config' . DS . 'bootstrap.php';
 
+if (!function_exists('loadPHPUnitAliases')) {
+    function loadPHPUnitAliases()
+    {
+        require_once dirname(__DIR__) . DS . 'tests' . DS . 'phpunit_aliases.php';
+    }
+}
 loadPHPUnitAliases();
 
 date_default_timezone_set('UTC');
 mb_internal_encoding('UTF-8');
 
-Log::setConfig('error', [
+Log::config('error', [
     'className' => EntityFileLog::class,
     'path' => LOGS,
     'file' => 'error',
