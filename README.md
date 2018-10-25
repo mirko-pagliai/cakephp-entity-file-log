@@ -7,12 +7,23 @@
 
 *cakephp-entity-file-log* is a CakePHP plugin that provides a log adapter that writes log (as entities) files.
 
+Did you like this plugin? Its development requires a lot of time for me.  
+Please consider the possibility of making [a donation](//paypal.me/mirkopagliai): even a coffee is enough! Thank you.
+
+[![Make a donation](https://www.paypalobjects.com/webstatic/mktg/logo-center/logo_paypal_carte.jpg)](//paypal.me/mirkopagliai)
+
 ## Installation
 You can install the plugin via composer:
 
     $ composer require --prefer-dist mirko-pagliai/cakephp-entity-file-log
 
-**NOTE: the latest version available requires at least CakePHP 3.4**.
+**NOTE: the latest version available requires at least CakePHP 3.6**.
+
+Instead, the [cakephp3.2](//github.com/mirko-pagliai/cakephp-entity-file-log/tree/cakephp3.2)
+branch is compatible with all previous versions of CakePHP from version 3.2. 
+In this case, you can install the package as well:
+
+    $ composer require --prefer-dist mirko-pagliai/cakephp-entity-file-log:dev-cakephp3.2
 
 After installation, you have to edit `APP/config/bootstrap.php` to load the plugin:
 
