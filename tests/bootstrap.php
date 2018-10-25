@@ -40,8 +40,6 @@ loadPHPUnitAliases();
 date_default_timezone_set('UTC');
 mb_internal_encoding('UTF-8');
 
-Plugin::load('EntityFileLog', ['bootstrap' => true, 'path' => ROOT]);
-
 Log::setConfig('error', [
     'className' => EntityFileLog::class,
     'path' => LOGS,
