@@ -10,6 +10,7 @@
  * @link        https://github.com/mirko-pagliai/cakephp-entity-file-log
  * @license     https://opensource.org/licenses/mit-license.php MIT License
  */
+use Cake\Core\Configure;
 use Cake\Log\Log;
 use EntityFileLog\Log\Engine\EntityFileLog;
 
@@ -41,6 +42,10 @@ if (!function_exists('loadPHPUnitAliases')) {
     }
 }
 loadPHPUnitAliases();
+
+if (version_compare(Configure::version(), '3.6', '>=')) {
+    error_reporting(E_ALL & ~E_USER_DEPRECATED);
+}
 
 date_default_timezone_set('UTC');
 mb_internal_encoding('UTF-8');
