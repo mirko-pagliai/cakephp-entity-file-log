@@ -159,7 +159,7 @@ TRACE;
             $this->assertContains($log->level, ['critical', 'error']);
             $this->assertRegExp('/^\d{4}\-\d{2}\-\d{2} \d{2}:\d{2}:\d{2}$/', $log->datetime);
             $this->assertRegExp('/^This is (a critical|an error) message$/', $log->message);
-            $this->assertRegExp('/^[\d-:\s]{19} (Critical|Error)/', $log->full);
+            $this->assertRegExp('/^[\d\-:\s]{19} (Critical|Error)/', $log->full);
         }
 
         if (is_win()) {
