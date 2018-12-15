@@ -12,7 +12,6 @@
  */
 namespace EntityFileLog\Test\TestCase\Log\Engine;
 
-use Cake\Http\BaseApplication;
 use Cake\Log\Log;
 use Cake\TestSuite\TestCase;
 use EntityFileLog\Log\Engine\EntityFileLog;
@@ -37,21 +36,18 @@ class EntityFileLogTest extends TestCase
     }
 
     /**
-     * Setup the test case, backup the static object values so they can be
-     * restored. Specifically backs up the contents of Configure and paths in
-     *  App if they have not already been backed up
+     * Called before every test method
      * @return void
      */
     public function setUp()
     {
         parent::setUp();
 
-        $app = $this->getMockForAbstractClass(BaseApplication::class, ['']);
-        $app->addPlugin('EntityFileLog')->pluginBootstrap();
+        $this->loadPlugins(['EntityFileLog']);
     }
 
     /**
-     * Teardown any static object changes and restore them
+     * Called after every test method
      * @return void
      */
     public function tearDown()
@@ -159,7 +155,7 @@ TRACE;
             $this->assertContains($log->level, ['critical', 'error']);
             $this->assertRegExp('/^\d{4}\-\d{2}\-\d{2} \d{2}:\d{2}:\d{2}$/', $log->datetime);
             $this->assertRegExp('/^This is (a critical|an error) message$/', $log->message);
-            $this->assertRegExp('/^[\d-:\s]{19} (Critical|Error)/', $log->full);
+            $this->assertRegExp('/^[\d\-:\s]{19} (Critical|Error)/', $log->full);
         }
 
         if (is_win()) {
