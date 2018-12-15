@@ -35,16 +35,8 @@ safe_mkdir(LOGS);
 
 require_once CORE_PATH . 'config' . DS . 'bootstrap.php';
 
-if (!function_exists('loadPHPUnitAliases')) {
-    function loadPHPUnitAliases()
-    {
-        require_once dirname(__DIR__) . DS . 'tests' . DS . 'phpunit_aliases.php';
-    }
-}
-loadPHPUnitAliases();
-
 if (version_compare(Configure::version(), '3.6', '>=')) {
-    error_reporting(E_ALL & ~E_USER_DEPRECATED);
+//    error_reporting(E_ALL & ~E_USER_DEPRECATED);
 }
 
 date_default_timezone_set('UTC');
@@ -58,3 +50,7 @@ Log::config('error', [
 ]);
 
 $_SERVER['PHP_SELF'] = '/';
+
+if (!class_exists('PHPUnit\Runner\Version')) {
+    class_alias('PHPUnit_Framework_Error_Warning', 'PHPUnit\Framework\Error\Warning');
+}
