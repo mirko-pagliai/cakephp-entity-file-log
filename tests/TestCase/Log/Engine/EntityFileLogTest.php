@@ -12,7 +12,6 @@
  */
 namespace EntityFileLog\Test\TestCase\Log\Engine;
 
-use Cake\Http\BaseApplication;
 use Cake\Log\Log;
 use Cake\TestSuite\TestCase;
 use EntityFileLog\Log\Engine\EntityFileLog;
@@ -44,8 +43,7 @@ class EntityFileLogTest extends TestCase
     {
         parent::setUp();
 
-        $app = $this->getMockForAbstractClass(BaseApplication::class, ['']);
-        $app->addPlugin('EntityFileLog')->pluginBootstrap();
+        $this->loadPlugins(['EntityFileLog']);
     }
 
     /**
