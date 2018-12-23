@@ -13,6 +13,8 @@
 namespace EntityFileLog\Test\TestCase\Log\Engine;
 
 use Cake\Log\Log;
+use Cake\ORM\Entity;
+use Cake\Routing\Exception\MissingControllerException;
 use Cake\TestSuite\TestCase;
 use EntityFileLog\Log\Engine\EntityFileLog;
 use Tools\ReflectionTrait;
@@ -105,7 +107,7 @@ TRACE;
         $this->assertTrue($result->has(['level', 'datetime', 'exception', 'message', 'request', 'ip', 'trace', 'full']));
         $this->assertEquals('error', $result->level);
         $this->assertRegExp('/^\d{4}\-\d{2}\-\d{2} \d{2}:\d{2}:\d{2}$/', $result->datetime);
-        $this->assertEquals('Cake\Routing\Exception\MissingControllerException', $result->exception);
+        $this->assertEquals(MissingControllerException::class, $result->exception);
         $this->assertEquals('Controller class NoExistingRoute could not be found.', $result->message);
         $this->assertEquals('/noExistingRoute', $result->request);
         $this->assertEquals('1.1.1.1', $result->ip);
@@ -126,7 +128,7 @@ TRACE;
         ]));
         $this->assertEquals('error', $result->level);
         $this->assertRegExp('/^\d{4}\-\d{2}\-\d{2} \d{2}:\d{2}:\d{2}$/', $result->datetime);
-        $this->assertEquals('Cake\Routing\Exception\MissingControllerException', $result->exception);
+        $this->assertEquals(MissingControllerException::class, $result->exception);
         $this->assertEquals('Controller class NoExistingRoute could not be found.', $result->message);
         $this->assertEquals($expectedAttributes, $result->attributes);
         $this->assertEquals('/noExistingRoute', $result->request);
@@ -151,7 +153,7 @@ TRACE;
         $this->assertNotEmpty($logs);
 
         foreach ($logs as $log) {
-            $this->assertInstanceOf('Cake\ORM\Entity', $log);
+            $this->assertInstanceOf(Entity::class, $log);
             $this->assertContains($log->level, ['critical', 'error']);
             $this->assertRegExp('/^\d{4}\-\d{2}\-\d{2} \d{2}:\d{2}:\d{2}$/', $log->datetime);
             $this->assertRegExp('/^This is (a critical|an error) message$/', $log->message);
@@ -202,10 +204,7 @@ TRACE;
             ->setConstructorArgs([['mask' => 0777, 'path' => LOGS]])
             ->setMethods(['checkPermissionMask'])
             ->getMock();
-
-        $SerializedLog->method('checkPermissionMask')
-            ->will($this->returnValue(false));
-
+        $SerializedLog->method('checkPermissionMask')->will($this->returnValue(false));
         $SerializedLog->log('error', 'a message');
     }
 }

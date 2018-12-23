@@ -16,6 +16,9 @@ use Cake\Log\Engine\FileLog;
 use Cake\ORM\Entity;
 use Tools\FileArray;
 
+/**
+ * EntityFileLog class
+ */
 class EntityFileLog extends FileLog
 {
     /**
