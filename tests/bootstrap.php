@@ -53,4 +53,5 @@ $_SERVER['PHP_SELF'] = '/';
 
 if (!class_exists('PHPUnit\Runner\Version')) {
     class_alias('PHPUnit_Framework_Error_Warning', 'PHPUnit\Framework\Error\Warning');
+    class_alias('PHPUnit_Framework_TestCase', 'PHPUnit\Framework\TestCase');
 }
