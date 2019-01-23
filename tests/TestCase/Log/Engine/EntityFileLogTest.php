@@ -15,19 +15,14 @@ namespace EntityFileLog\Test\TestCase\Log\Engine;
 use Cake\Log\Log;
 use Cake\ORM\Entity;
 use Cake\Routing\Exception\MissingControllerException;
-use Cake\TestSuite\TestCase;
 use EntityFileLog\Log\Engine\EntityFileLog;
-use Tools\ReflectionTrait;
-use Tools\TestSuite\TestCaseTrait;
+use MeTools\TestSuite\TestCase;
 
 /**
  * EntityFileLogTest class
  */
 class EntityFileLogTest extends TestCase
 {
-    use ReflectionTrait;
-    use TestCaseTrait;
-
     /**
      * Internal method to write some logs
      */
@@ -35,28 +30,6 @@ class EntityFileLogTest extends TestCase
     {
         Log::error('This is an error message');
         Log::critical('This is a critical message');
-    }
-
-    /**
-     * Called before every test method
-     * @return void
-     */
-    public function setUp()
-    {
-        parent::setUp();
-
-        $this->loadPlugins(['EntityFileLog']);
-    }
-
-    /**
-     * Called after every test method
-     * @return void
-     */
-    public function tearDown()
-    {
-        parent::tearDown();
-
-        @unlink_recursive(LOGS);
     }
 
     /**
@@ -160,10 +133,7 @@ TRACE;
             $this->assertRegExp('/^[\d\-:\s]{19} (Critical|Error)/', $log->full);
         }
 
-        if (IS_WIN) {
-            $this->markTestSkipped();
-        }
-
+        $this->skipIf(IS_WIN);
         $this->assertFilePerms(LOGS . 'error.log', ['0644', '0664']);
         $this->assertFilePerms(LOGS . 'error_serialized.log', ['0644', '0664']);
     }
@@ -185,10 +155,7 @@ TRACE;
         Log::drop('error');
         Log::setConfig('error', $oldConfig);
 
-        if (IS_WIN) {
-            $this->markTestSkipped();
-        }
-
+        $this->skipIf(IS_WIN);
         $this->assertFilePerms(LOGS . 'error.log', '0777');
         $this->assertFilePerms(LOGS . 'error_serialized.log', '0777');
     }
