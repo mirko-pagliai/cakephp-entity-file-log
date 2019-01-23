@@ -119,8 +119,8 @@ TRACE;
         //Writes some logs
         $this->writeSomeLogs();
 
-        $this->assertContains('Error: This is an error message', file_get_contents(LOGS . 'error.log'));
-        $this->assertContains('Critical: This is a critical message', file_get_contents(LOGS . 'error.log'));
+        $this->assertLogContains('Error: This is an error message', 'error.log');
+        $this->assertLogContains('Critical: This is a critical message', 'error.log');
 
         $logs = @unserialize(file_get_contents(LOGS . 'error_serialized.log'));
         $this->assertNotEmpty($logs);
