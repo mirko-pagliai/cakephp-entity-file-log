@@ -10,6 +10,7 @@
  * @link        https://github.com/mirko-pagliai/cakephp-entity-file-log
  * @license     https://opensource.org/licenses/mit-license.php MIT License
  */
+use Cake\Core\Configure;
 use Cake\Log\Log;
 use EntityFileLog\Log\Engine\EntityFileLog;
 
@@ -26,11 +27,15 @@ define('ROOT', dirname(__DIR__) . DS);
 define('CORE_PATH', ROOT . 'vendor' . DS . 'cakephp' . DS . 'cakephp' . DS);
 define('CAKE', CORE_PATH . 'src' . DS);
 define('TESTS', ROOT . 'tests' . DS);
+define('APP', ROOT . 'tests' . DS . 'test_app' . DS);
+define('WWW_ROOT', APP . 'webroot' . DS);
 define('TMP', sys_get_temp_dir() . DS . 'cakephp-entity-log' . DS);
+define('CACHE', TMP . 'cache' . DS);
 define('LOGS', TMP . 'logs' . DS);
 
-safe_mkdir(TMP);
-safe_mkdir(LOGS);
+@mkdir(TMP);
+@mkdir(CACHE);
+@mkdir(LOGS);
 
 require_once CORE_PATH . 'config' . DS . 'bootstrap.php';
 
@@ -45,5 +50,7 @@ Log::setConfig('error', [
     'file' => 'error',
     'levels' => ['warning', 'error', 'critical', 'alert', 'emergency'],
 ]);
+
+Configure::write('pluginsToLoad', ['EntityFileLog']);
 
 $_SERVER['PHP_SELF'] = '/';

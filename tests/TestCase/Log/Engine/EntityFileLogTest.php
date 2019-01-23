@@ -13,19 +13,16 @@
 namespace EntityFileLog\Test\TestCase\Log\Engine;
 
 use Cake\Log\Log;
-use Cake\TestSuite\TestCase;
+use Cake\ORM\Entity;
+use Cake\Routing\Exception\MissingControllerException;
 use EntityFileLog\Log\Engine\EntityFileLog;
-use Tools\ReflectionTrait;
-use Tools\TestSuite\TestCaseTrait;
+use MeTools\TestSuite\TestCase;
 
 /**
  * EntityFileLogTest class
  */
 class EntityFileLogTest extends TestCase
 {
-    use ReflectionTrait;
-    use TestCaseTrait;
-
     /**
      * Internal method to write some logs
      */
@@ -33,28 +30,6 @@ class EntityFileLogTest extends TestCase
     {
         Log::error('This is an error message');
         Log::critical('This is a critical message');
-    }
-
-    /**
-     * Called before every test method
-     * @return void
-     */
-    public function setUp()
-    {
-        parent::setUp();
-
-        $this->loadPlugins(['EntityFileLog']);
-    }
-
-    /**
-     * Called after every test method
-     * @return void
-     */
-    public function tearDown()
-    {
-        parent::tearDown();
-
-        safe_unlink_recursive(LOGS);
     }
 
     /**
@@ -105,7 +80,7 @@ TRACE;
         $this->assertTrue($result->has(['level', 'datetime', 'exception', 'message', 'request', 'ip', 'trace', 'full']));
         $this->assertEquals('error', $result->level);
         $this->assertRegExp('/^\d{4}\-\d{2}\-\d{2} \d{2}:\d{2}:\d{2}$/', $result->datetime);
-        $this->assertEquals('Cake\Routing\Exception\MissingControllerException', $result->exception);
+        $this->assertEquals(MissingControllerException::class, $result->exception);
         $this->assertEquals('Controller class NoExistingRoute could not be found.', $result->message);
         $this->assertEquals('/noExistingRoute', $result->request);
         $this->assertEquals('1.1.1.1', $result->ip);
@@ -126,7 +101,7 @@ TRACE;
         ]));
         $this->assertEquals('error', $result->level);
         $this->assertRegExp('/^\d{4}\-\d{2}\-\d{2} \d{2}:\d{2}:\d{2}$/', $result->datetime);
-        $this->assertEquals('Cake\Routing\Exception\MissingControllerException', $result->exception);
+        $this->assertEquals(MissingControllerException::class, $result->exception);
         $this->assertEquals('Controller class NoExistingRoute could not be found.', $result->message);
         $this->assertEquals($expectedAttributes, $result->attributes);
         $this->assertEquals('/noExistingRoute', $result->request);
@@ -144,24 +119,21 @@ TRACE;
         //Writes some logs
         $this->writeSomeLogs();
 
-        $this->assertContains('Error: This is an error message', file_get_contents(LOGS . 'error.log'));
-        $this->assertContains('Critical: This is a critical message', file_get_contents(LOGS . 'error.log'));
+        $this->assertLogContains('Error: This is an error message', 'error.log');
+        $this->assertLogContains('Critical: This is a critical message', 'error.log');
 
-        $logs = safe_unserialize(file_get_contents(LOGS . 'error_serialized.log'));
+        $logs = @unserialize(file_get_contents(LOGS . 'error_serialized.log'));
         $this->assertNotEmpty($logs);
 
         foreach ($logs as $log) {
-            $this->assertInstanceOf('Cake\ORM\Entity', $log);
+            $this->assertInstanceOf(Entity::class, $log);
             $this->assertContains($log->level, ['critical', 'error']);
             $this->assertRegExp('/^\d{4}\-\d{2}\-\d{2} \d{2}:\d{2}:\d{2}$/', $log->datetime);
             $this->assertRegExp('/^This is (a critical|an error) message$/', $log->message);
             $this->assertRegExp('/^[\d\-:\s]{19} (Critical|Error)/', $log->full);
         }
 
-        if (is_win()) {
-            $this->markTestSkipped();
-        }
-
+        $this->skipIf(IS_WIN);
         $this->assertFilePerms(LOGS . 'error.log', ['0644', '0664']);
         $this->assertFilePerms(LOGS . 'error_serialized.log', ['0644', '0664']);
     }
@@ -183,10 +155,7 @@ TRACE;
         Log::drop('error');
         Log::setConfig('error', $oldConfig);
 
-        if (is_win()) {
-            $this->markTestSkipped();
-        }
-
+        $this->skipIf(IS_WIN);
         $this->assertFilePerms(LOGS . 'error.log', '0777');
         $this->assertFilePerms(LOGS . 'error_serialized.log', '0777');
     }
@@ -202,10 +171,7 @@ TRACE;
             ->setConstructorArgs([['mask' => 0777, 'path' => LOGS]])
             ->setMethods(['checkPermissionMask'])
             ->getMock();
-
-        $SerializedLog->method('checkPermissionMask')
-            ->will($this->returnValue(false));
-
+        $SerializedLog->method('checkPermissionMask')->will($this->returnValue(false));
         $SerializedLog->log('error', 'a message');
     }
 }
