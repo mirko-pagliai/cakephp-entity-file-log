@@ -30,8 +30,8 @@ define('TESTS', ROOT . 'tests' . DS);
 define('TMP', sys_get_temp_dir() . DS . 'cakephp-entity-log' . DS);
 define('LOGS', TMP . 'logs' . DS);
 
-safe_mkdir(TMP);
-safe_mkdir(LOGS);
+@mkdir(TMP);
+@mkdir(LOGS);
 
 require_once CORE_PATH . 'config' . DS . 'bootstrap.php';
 
