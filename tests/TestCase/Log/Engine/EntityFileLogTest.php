@@ -56,7 +56,7 @@ class EntityFileLogTest extends TestCase
     {
         parent::tearDown();
 
-        safe_unlink_recursive(LOGS);
+        @unlink_recursive(LOGS);
     }
 
     /**
@@ -149,7 +149,7 @@ TRACE;
         $this->assertContains('Error: This is an error message', file_get_contents(LOGS . 'error.log'));
         $this->assertContains('Critical: This is a critical message', file_get_contents(LOGS . 'error.log'));
 
-        $logs = safe_unserialize(file_get_contents(LOGS . 'error_serialized.log'));
+        $logs = @unserialize(file_get_contents(LOGS . 'error_serialized.log'));
         $this->assertNotEmpty($logs);
 
         foreach ($logs as $log) {
@@ -160,7 +160,7 @@ TRACE;
             $this->assertRegExp('/^[\d\-:\s]{19} (Critical|Error)/', $log->full);
         }
 
-        if (is_win()) {
+        if (IS_WIN) {
             $this->markTestSkipped();
         }
 
@@ -185,7 +185,7 @@ TRACE;
         Log::drop('error');
         Log::setConfig('error', $oldConfig);
 
-        if (is_win()) {
+        if (IS_WIN) {
             $this->markTestSkipped();
         }
 
