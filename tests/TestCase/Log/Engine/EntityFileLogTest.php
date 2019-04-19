@@ -134,8 +134,8 @@ TRACE;
         }
 
         $this->skipIf(IS_WIN);
-        $this->assertFilePerms(LOGS . 'error.log', ['0644', '0664']);
-        $this->assertFilePerms(LOGS . 'error_serialized.log', ['0644', '0664']);
+        $this->assertFilePerms(['0644', '0664'], LOGS . 'error.log');
+        $this->assertFilePerms(['0644', '0664'], LOGS . 'error_serialized.log');
     }
 
     /**
@@ -156,8 +156,8 @@ TRACE;
         Log::setConfig('error', $oldConfig);
 
         $this->skipIf(IS_WIN);
-        $this->assertFilePerms(LOGS . 'error.log', '0777');
-        $this->assertFilePerms(LOGS . 'error_serialized.log', '0777');
+        $this->assertFilePerms('0777', LOGS . 'error.log');
+        $this->assertFilePerms('0777', LOGS . 'error_serialized.log');
     }
 
     /**
