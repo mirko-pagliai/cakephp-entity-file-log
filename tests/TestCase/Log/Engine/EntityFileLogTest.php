@@ -19,7 +19,7 @@ use Cake\Log\Log;
 use Cake\TestSuite\TestCase;
 use EntityFileLog\Log\Engine\EntityFileLog;
 use Tools\ReflectionTrait;
-use Tools\TestSuite\TestCaseTrait;
+use Tools\TestSuite\TestTrait;
 
 /**
  * EntityFileLogTest class
@@ -27,7 +27,7 @@ use Tools\TestSuite\TestCaseTrait;
 class EntityFileLogTest extends TestCase
 {
     use ReflectionTrait;
-    use TestCaseTrait;
+    use TestTrait;
 
     /**
      * Internal method to write some logs
@@ -172,8 +172,8 @@ TRACE;
             $this->markTestSkipped();
         }
 
-        $this->assertFilePerms(LOGS . 'error.log', ['0644', '0664']);
-        $this->assertFilePerms(LOGS . 'error_serialized.log', ['0644', '0664']);
+        $this->assertFilePerms(['0644', '0664'], LOGS . 'error.log');
+        $this->assertFilePerms(['0644', '0664'], LOGS . 'error_serialized.log');
     }
 
     /**
@@ -197,8 +197,8 @@ TRACE;
             $this->markTestSkipped();
         }
 
-        $this->assertFilePerms(LOGS . 'error.log', '0777');
-        $this->assertFilePerms(LOGS . 'error_serialized.log', '0777');
+        $this->assertFilePerms('0777', LOGS . 'error.log');
+        $this->assertFilePerms('0777', LOGS . 'error_serialized.log');
     }
 
     /**
