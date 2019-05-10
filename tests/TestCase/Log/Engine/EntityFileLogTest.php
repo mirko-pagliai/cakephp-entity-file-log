@@ -40,7 +40,7 @@ class EntityFileLogTest extends TestCase
     public function testGetLogAsObject()
     {
         $getLogAsObjectMethod = function () {
-            $object = new EntityFileLog;
+            $object = new EntityFileLog();
 
             return $this->invokeMethod($object, 'getLogAsObject', func_get_args());
         };

@@ -10,6 +10,7 @@
  * @link        https://github.com/mirko-pagliai/cakephp-entity-file-log
  * @license     https://opensource.org/licenses/mit-license.php MIT License
  */
+
 use Cake\Core\Configure;
 use Cake\Log\Log;
 use EntityFileLog\Log\Engine\EntityFileLog;
