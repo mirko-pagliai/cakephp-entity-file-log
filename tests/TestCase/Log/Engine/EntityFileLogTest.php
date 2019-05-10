@@ -17,6 +17,7 @@ use Cake\ORM\Entity;
 use Cake\Routing\Exception\MissingControllerException;
 use EntityFileLog\Log\Engine\EntityFileLog;
 use MeTools\TestSuite\TestCase;
+use PHPUnit\Framework\Error\Warning;
 
 /**
  * EntityFileLogTest class
@@ -139,6 +140,21 @@ TRACE;
     }
 
     /**
+     * Test for `log()` method on failure
+     * @test
+     */
+    public function testLogOnFailure()
+    {
+        $this->expectException(Warning::class);
+        $SerializedLog = $this->getMockBuilder(EntityFileLog::class)
+            ->setConstructorArgs([['mask' => 0777, 'path' => LOGS]])
+            ->setMethods(['checkPermissionMask'])
+            ->getMock();
+        $SerializedLog->method('checkPermissionMask')->will($this->returnValue(false));
+        $SerializedLog->log('error', 'a message');
+    }
+
+    /**
      * Test for `log()` method, with a different `mask` value
      * @test
      */
@@ -158,20 +174,5 @@ TRACE;
         $this->skipIf(IS_WIN);
         $this->assertFilePerms('0777', LOGS . 'error.log');
         $this->assertFilePerms('0777', LOGS . 'error_serialized.log');
-    }
-
-    /**
-     * Test for `log()` method on failure
-     * @expectedException PHPUnit\Framework\Error\Warning
-     * @test
-     */
-    public function testLogOnFailure()
-    {
-        $SerializedLog = $this->getMockBuilder(EntityFileLog::class)
-            ->setConstructorArgs([['mask' => 0777, 'path' => LOGS]])
-            ->setMethods(['checkPermissionMask'])
-            ->getMock();
-        $SerializedLog->method('checkPermissionMask')->will($this->returnValue(false));
-        $SerializedLog->log('error', 'a message');
     }
 }
