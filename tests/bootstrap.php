@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * This file is part of cakephp-entity-file-log.
  *
@@ -39,8 +40,6 @@ define('LOGS', TMP . 'logs' . DS);
 @mkdir(LOGS);
 
 require_once CORE_PATH . 'config' . DS . 'bootstrap.php';
-
-loadPHPUnitAliases();
 
 date_default_timezone_set('UTC');
 mb_internal_encoding('UTF-8');

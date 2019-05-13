@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * This file is part of cakephp-entity-file-log.
  *
@@ -104,14 +105,14 @@ class EntityFileLog extends FileLog
      *  See Cake\Log\Log::$_levels for list of possible levels.
      * @param string $message The message you want to log.
      * @param array $context Additional information about the logged message
-     * @return bool success of write
+     * @return void
      * @uses checkPermissionMask()
      * @uses getLogAsObject()
      */
-    public function log($level, $message, array $context = [])
+    public function log($level, $message, array $context = []): void
     {
         //First of all, it normally writes log
-        $parent = parent::log($level, $message, $context);
+        parent::log($level, $message, $context);
 
         /*
          * Now, it writes the serialized log
@@ -135,7 +136,9 @@ class EntityFileLog extends FileLog
         $FileArray = (new FileArray($pathname))->prepend($data);
 
         if (empty($mask)) {
-            return $parent && $FileArray->write();
+            $FileArray->write();
+
+            return;
         }
 
         $exists = file_exists($pathname);
@@ -150,7 +153,5 @@ class EntityFileLog extends FileLog
             ), E_USER_WARNING);
             $selfError = false;
         }
-
-        return $parent && $result;
     }
 }
