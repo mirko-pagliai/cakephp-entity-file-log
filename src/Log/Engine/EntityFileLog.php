@@ -27,11 +27,11 @@ class EntityFileLog extends FileLog
      * @param string $level The severity level of the message being written.
      *  See Cake\Log\Log::$_levels for list of possible levels
      * @param string $message The message you want to log
-     * @return Entity
+     * @return \Cake\ORM\Entity
      */
     protected function getLogAsObject($level, $message)
     {
-        $log = new Entity;
+        $log = new Entity();
         $log->level = $level;
         $log->datetime = date('Y-m-d H:i:s');
 

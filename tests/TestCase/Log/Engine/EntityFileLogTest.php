@@ -17,6 +17,7 @@ use Cake\ORM\Entity;
 use Cake\Routing\Exception\MissingControllerException;
 use EntityFileLog\Log\Engine\EntityFileLog;
 use MeTools\TestSuite\TestCase;
+use PHPUnit\Framework\Error\Warning;
 
 /**
  * EntityFileLogTest class
@@ -39,7 +40,7 @@ class EntityFileLogTest extends TestCase
     public function testGetLogAsObject()
     {
         $getLogAsObjectMethod = function () {
-            $object = new EntityFileLog;
+            $object = new EntityFileLog();
 
             return $this->invokeMethod($object, 'getLogAsObject', func_get_args());
         };
@@ -134,8 +135,23 @@ TRACE;
         }
 
         $this->skipIf(IS_WIN);
-        $this->assertFilePerms(LOGS . 'error.log', ['0644', '0664']);
-        $this->assertFilePerms(LOGS . 'error_serialized.log', ['0644', '0664']);
+        $this->assertFilePerms(['0644', '0664'], LOGS . 'error.log');
+        $this->assertFilePerms(['0644', '0664'], LOGS . 'error_serialized.log');
+    }
+
+    /**
+     * Test for `log()` method on failure
+     * @test
+     */
+    public function testLogOnFailure()
+    {
+        $this->expectException(Warning::class);
+        $SerializedLog = $this->getMockBuilder(EntityFileLog::class)
+            ->setConstructorArgs([['mask' => 0777, 'path' => LOGS]])
+            ->setMethods(['checkPermissionMask'])
+            ->getMock();
+        $SerializedLog->method('checkPermissionMask')->will($this->returnValue(false));
+        $SerializedLog->log('error', 'a message');
     }
 
     /**
@@ -156,22 +172,7 @@ TRACE;
         Log::setConfig('error', $oldConfig);
 
         $this->skipIf(IS_WIN);
-        $this->assertFilePerms(LOGS . 'error.log', '0777');
-        $this->assertFilePerms(LOGS . 'error_serialized.log', '0777');
-    }
-
-    /**
-     * Test for `log()` method on failure
-     * @expectedException PHPUnit\Framework\Error\Warning
-     * @test
-     */
-    public function testLogOnFailure()
-    {
-        $SerializedLog = $this->getMockBuilder(EntityFileLog::class)
-            ->setConstructorArgs([['mask' => 0777, 'path' => LOGS]])
-            ->setMethods(['checkPermissionMask'])
-            ->getMock();
-        $SerializedLog->method('checkPermissionMask')->will($this->returnValue(false));
-        $SerializedLog->log('error', 'a message');
+        $this->assertFilePerms('0777', LOGS . 'error.log');
+        $this->assertFilePerms('0777', LOGS . 'error_serialized.log');
     }
 }
