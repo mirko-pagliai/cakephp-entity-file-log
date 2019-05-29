@@ -140,21 +140,6 @@ TRACE;
     }
 
     /**
-     * Test for `log()` method on failure
-     * @test
-     */
-    public function testLogOnFailure()
-    {
-        $this->expectException(Warning::class);
-        $SerializedLog = $this->getMockBuilder(EntityFileLog::class)
-            ->setConstructorArgs([['mask' => 0777, 'path' => LOGS]])
-            ->setMethods(['checkPermissionMask'])
-            ->getMock();
-        $SerializedLog->method('checkPermissionMask')->will($this->returnValue(false));
-        $SerializedLog->log('error', 'a message');
-    }
-
-    /**
      * Test for `log()` method, with a different `mask` value
      * @test
      */
