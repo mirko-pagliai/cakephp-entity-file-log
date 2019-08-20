@@ -4,6 +4,9 @@
 * updated for `cakephp` 4 and `phpunit` 8.
 
 ## 1.0 branch
+### 1.0.4
+* added tests for lower dependencies.
+
 ### 1.0.3
 * updated for `php-tools` 1.2.
 
