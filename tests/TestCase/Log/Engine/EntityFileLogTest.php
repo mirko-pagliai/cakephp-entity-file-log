@@ -17,7 +17,6 @@ use Cake\ORM\Entity;
 use Cake\Routing\Exception\MissingControllerException;
 use EntityFileLog\Log\Engine\EntityFileLog;
 use MeTools\TestSuite\TestCase;
-use PHPUnit\Framework\Error\Warning;
 
 /**
  * EntityFileLogTest class
