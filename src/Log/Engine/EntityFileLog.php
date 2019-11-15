@@ -16,6 +16,9 @@ use Cake\Log\Engine\FileLog;
 use Cake\ORM\Entity;
 use Tools\FileArray;
 
+/**
+ * EntityFileLog class
+ */
 class EntityFileLog extends FileLog
 {
     /**
@@ -24,21 +27,21 @@ class EntityFileLog extends FileLog
      * @param string $level The severity level of the message being written.
      *  See Cake\Log\Log::$_levels for list of possible levels
      * @param string $message The message you want to log
-     * @return Entity
+     * @return \Cake\ORM\Entity
      */
     protected function getLogAsObject($level, $message)
     {
-        $log = new Entity;
-        $log->level = $level;
-        $log->datetime = date('Y-m-d H:i:s');
+        $log = new Entity();
+        $log->set('level', $level);
+        $log->set('datetime', date('Y-m-d H:i:s'));
 
         //Sets exception type and message
         if (preg_match('/^(\[([^\]]+)\]\s)?(.+)/', $message, $matches)) {
             if (!empty($matches[2])) {
-                $log->exception = $matches[2];
+                $log->set('exception', $matches[2]);
             }
 
-            $log->message = $matches[3];
+            $log->set('message', $matches[3]);
         }
 
         //Sets the exception attributes
@@ -47,31 +50,31 @@ class EntityFileLog extends FileLog
             $message,
             $matches
         )) {
-            $log->attributes = $matches[1];
+            $log->set('attributes', $matches[1]);
         }
 
         //Sets the request URL
         if (preg_match('/^Request URL:\s(.+)$/mi', $message, $matches)) {
-            $log->request = $matches[1];
+            $log->set('request', $matches[1]);
         }
 
         //Sets the referer URL
         if (preg_match('/^Referer URL:\s(.+)$/mi', $message, $matches)) {
-            $log->referer = $matches[1];
+            $log->set('referer', $matches[1]);
         }
 
         //Sets the client IP
         if (preg_match('/^Client IP:\s(.+)$/mi', $message, $matches)) {
-            $log->ip = $matches[1];
+            $log->set('ip', $matches[1]);
         }
 
         //Sets the trace
         if (preg_match('/(Stack )?Trace:\n(.+)$/is', $message, $matches)) {
-            $log->trace = trim($matches[2]);
+            $log->set('trace', trim($matches[2]));
         }
 
         //Adds the full log
-        $log->full = trim(sprintf('%s %s: %s', date('Y-m-d H:i:s'), ucfirst($level), $message));
+        $log->set('full', trim(sprintf('%s %s: %s', date('Y-m-d H:i:s'), ucfirst($level), $message)));
 
         return $log;
     }

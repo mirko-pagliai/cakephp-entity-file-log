@@ -16,8 +16,10 @@ use Cake\Core\Configure;
 use Cake\Core\Plugin;
 use Cake\Http\BaseApplication;
 use Cake\Log\Log;
-use Cake\TestSuite\TestCase;
+use Cake\ORM\Entity;
+use Cake\Routing\Exception\MissingControllerException;
 use EntityFileLog\Log\Engine\EntityFileLog;
+use MeTools\TestSuite\TestCase;
 use Tools\ReflectionTrait;
 use Tools\TestSuite\TestTrait;
 
@@ -74,9 +76,7 @@ class EntityFileLogTest extends TestCase
     public function testGetLogAsObject()
     {
         $getLogAsObjectMethod = function () {
-            $object = new EntityFileLog;
-
-            return $this->invokeMethod($object, 'getLogAsObject', func_get_args());
+            return $this->invokeMethod(new EntityFileLog(), 'getLogAsObject', func_get_args());
         };
 
         $expectedAttributes = <<<ATTRIBUTES
@@ -107,19 +107,19 @@ TRACE;
 
         $result = $getLogAsObjectMethod('error', 'example of message');
         $this->assertTrue($result->has(['level', 'datetime', 'message', 'full']));
-        $this->assertEquals('error', $result->level);
-        $this->assertRegExp('/^\d{4}\-\d{2}\-\d{2} \d{2}:\d{2}:\d{2}$/', $result->datetime);
-        $this->assertEquals('example of message', $result->message);
+        $this->assertEquals('error', $result->get('level'));
+        $this->assertRegExp('/^\d{4}\-\d{2}\-\d{2} \d{2}:\d{2}:\d{2}$/', $result->get('datetime'));
+        $this->assertEquals('example of message', $result->get('message'));
 
         $result = $getLogAsObjectMethod('error', file_get_contents(TESTS . 'examples' . DS . 'stacktrace1'));
         $this->assertTrue($result->has(['level', 'datetime', 'exception', 'message', 'request', 'ip', 'trace', 'full']));
-        $this->assertEquals('error', $result->level);
-        $this->assertRegExp('/^\d{4}\-\d{2}\-\d{2} \d{2}:\d{2}:\d{2}$/', $result->datetime);
-        $this->assertEquals('Cake\Routing\Exception\MissingControllerException', $result->exception);
-        $this->assertEquals('Controller class NoExistingRoute could not be found.', $result->message);
-        $this->assertEquals('/noExistingRoute', $result->request);
-        $this->assertEquals('1.1.1.1', $result->ip);
-        $this->assertEquals($expectedTrace, $result->trace);
+        $this->assertEquals('error', $result->get('level'));
+        $this->assertRegExp('/^\d{4}\-\d{2}\-\d{2} \d{2}:\d{2}:\d{2}$/', $result->get('datetime'));
+        $this->assertEquals(MissingControllerException::class, $result->get('exception'));
+        $this->assertEquals('Controller class NoExistingRoute could not be found.', $result->get('message'));
+        $this->assertEquals('/noExistingRoute', $result->get('request'));
+        $this->assertEquals('1.1.1.1', $result->get('ip'));
+        $this->assertEquals($expectedTrace, $result->get('trace'));
 
         $result = $getLogAsObjectMethod('error', file_get_contents(TESTS . 'examples' . DS . 'stacktrace2'));
         $this->assertTrue($result->has([
@@ -134,15 +134,15 @@ TRACE;
             'trace',
             'full',
         ]));
-        $this->assertEquals('error', $result->level);
-        $this->assertRegExp('/^\d{4}\-\d{2}\-\d{2} \d{2}:\d{2}:\d{2}$/', $result->datetime);
-        $this->assertEquals('Cake\Routing\Exception\MissingControllerException', $result->exception);
-        $this->assertEquals('Controller class NoExistingRoute could not be found.', $result->message);
-        $this->assertEquals($expectedAttributes, $result->attributes);
-        $this->assertEquals('/noExistingRoute', $result->request);
-        $this->assertEquals('/noExistingReferer', $result->referer);
-        $this->assertEquals('1.1.1.1', $result->ip);
-        $this->assertEquals($expectedTrace, $result->trace);
+        $this->assertEquals('error', $result->get('level'));
+        $this->assertRegExp('/^\d{4}\-\d{2}\-\d{2} \d{2}:\d{2}:\d{2}$/', $result->get('datetime'));
+        $this->assertEquals(MissingControllerException::class, $result->get('exception'));
+        $this->assertEquals('Controller class NoExistingRoute could not be found.', $result->get('message'));
+        $this->assertEquals($expectedAttributes, $result->get('attributes'));
+        $this->assertEquals('/noExistingRoute', $result->get('request'));
+        $this->assertEquals('/noExistingReferer', $result->get('referer'));
+        $this->assertEquals('1.1.1.1', $result->get('ip'));
+        $this->assertEquals($expectedTrace, $result->get('trace'));
     }
 
     /**
@@ -154,24 +154,21 @@ TRACE;
         //Writes some logs
         $this->writeSomeLogs();
 
-        $this->assertContains('Error: This is an error message', file_get_contents(LOGS . 'error.log'));
-        $this->assertContains('Critical: This is a critical message', file_get_contents(LOGS . 'error.log'));
+        $this->assertLogContains('Error: This is an error message', 'error.log');
+        $this->assertLogContains('Critical: This is a critical message', 'error.log');
 
         $logs = @unserialize(file_get_contents(LOGS . 'error_serialized.log'));
         $this->assertNotEmpty($logs);
 
         foreach ($logs as $log) {
-            $this->assertInstanceOf('Cake\ORM\Entity', $log);
-            $this->assertContains($log->level, ['critical', 'error']);
-            $this->assertRegExp('/^\d{4}\-\d{2}\-\d{2} \d{2}:\d{2}:\d{2}$/', $log->datetime);
-            $this->assertRegExp('/^This is (a critical|an error) message$/', $log->message);
-            $this->assertRegExp('/^[\d-:\s]{19} (Critical|Error)/', $log->full);
+            $this->assertInstanceOf(Entity::class, $log);
+            $this->assertContains($log->get('level'), ['critical', 'error']);
+            $this->assertRegExp('/^\d{4}\-\d{2}\-\d{2} \d{2}:\d{2}:\d{2}$/', $log->get('datetime'));
+            $this->assertRegExp('/^This is (a critical|an error) message$/', $log->get('message'));
+            $this->assertRegExp('/^[\d\-:\s]{19} (Critical|Error)/', $log->get('full'));
         }
 
-        if (IS_WIN) {
-            $this->markTestSkipped();
-        }
-
+        $this->skipIf(IS_WIN);
         $this->assertFilePerms(['0644', '0664'], LOGS . 'error.log');
         $this->assertFilePerms(['0644', '0664'], LOGS . 'error_serialized.log');
     }
@@ -193,29 +190,8 @@ TRACE;
         Log::drop('error');
         Log::config('error', $oldConfig);
 
-        if (IS_WIN) {
-            $this->markTestSkipped();
-        }
-
+        $this->skipIf(IS_WIN);
         $this->assertFilePerms('0777', LOGS . 'error.log');
         $this->assertFilePerms('0777', LOGS . 'error_serialized.log');
-    }
-
-    /**
-     * Test for `log()` method on failure
-     * @expectedException PHPUnit\Framework\Error\Warning
-     * @test
-     */
-    public function testLogOnFailure()
-    {
-        $SerializedLog = $this->getMockBuilder(EntityFileLog::class)
-            ->setConstructorArgs([['mask' => 0777, 'path' => LOGS]])
-            ->setMethods(['checkPermissionMask'])
-            ->getMock();
-
-        $SerializedLog->method('checkPermissionMask')
-            ->will($this->returnValue(false));
-
-        $SerializedLog->log('error', 'a message');
     }
 }
