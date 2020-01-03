@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * This file is part of cakephp-entity-file-log.
  *
@@ -40,10 +41,13 @@ define('LOGS', TMP . 'logs' . DS);
 
 require_once CORE_PATH . 'config' . DS . 'bootstrap.php';
 
+<<<<<<< HEAD
 if (version_compare(Configure::version(), '3.6', '>=')) {
     error_reporting(E_ALL & ~E_USER_DEPRECATED);
 }
 
+=======
+>>>>>>> develop
 date_default_timezone_set('UTC');
 mb_internal_encoding('UTF-8');
 
