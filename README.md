@@ -9,7 +9,7 @@
 *cakephp-entity-file-log* is a CakePHP plugin that provides a log adapter that
 writes log (as entities) files.
 
-Did you like this plugin? Its development requires a lot of time for me.  
+Did you like this plugin? Its development requires a lot of time for me.
 Please consider the possibility of making [a donation](//paypal.me/mirkopagliai):
 even a coffee is enough! Thank you.
 
@@ -20,36 +20,41 @@ You can install the plugin via composer:
 ```bash
 $ composer require --prefer-dist mirko-pagliai/cakephp-entity-file-log
 ```
-**NOTE: the latest version available requires at least CakePHP 3.7**.
+**NOTE: the latest version available requires at least CakePHP 4**.
 
-Instead, the [cakephp3.2](//github.com/mirko-pagliai/cakephp-entity-file-log/tree/cakephp3.2)
-branch is compatible with all previous versions of CakePHP from version 3.2. 
+Instead, the [cakephp3](//github.com/mirko-pagliai/cakephp-entity-file-log/tree/cakephp3)
+branch is compatible with all previous versions of CakePHP from version 3.2.
+This branch coincides with the current version of *cakephp-entity-file-log*.
+
 In this case, you can install the package as well:
 ```bash
-    $ composer require --prefer-dist mirko-pagliai/cakephp-entity-file-log:dev-cakephp3.2
+    $ composer require --prefer-dist mirko-pagliai/cakephp-entity-file-log:dev-cakephp3
 ```
-After installation, you have to edit `APP/config/bootstrap.php` to load the plugin:
 
-    Plugin::load('EntityFileLog', ['bootstrap' => true]);
+Then you have to load the plugin. For more information on how to load the plugin,
+please refer to the [Cookbook](//book.cakephp.org/4.0/en/plugins.html#loading-a-plugin).
 
-For more information on how to load the plugin, please refer to the 
-[Cookbook](https://book.cakephp.org/3.0/en/core-libraries/logging.html#logging-configuration).
+Simply, you can execute the shell command to enable the plugin:
+```bash
+bin/cake plugin load EntityFileLog
+```
+This would update your application's bootstrap method.
 
 ## How to use
 Simply, you have to use the `EntityFileLog\Log\Engine\EntityFileLog` class as a log adapter.
 
-For more information on how to configure logs, please refer to the 
-[Cookbook](http://book.cakephp.org/3.0/en/plugins.html#loading-a-plugin).
+For more information on how to configure logs, please refer to the
+[Cookbook](http://book.cakephp.org/4.0/en/plugins.html#loading-a-plugin).
 
 Example:
 ```php
 Log::setConfig('error', [
-	'className' => 'EntityFileLog\Log\Engine\EntityFileLog',
-	'path' => LOGS,
-	'file' => 'error',
-	'levels' => ['warning', 'error', 'critical', 'alert', 'emergency'],
+    'className' => 'EntityFileLog\Log\Engine\EntityFileLog',
+    'path' => LOGS,
+    'file' => 'error',
+    'levels' => ['warning', 'error', 'critical', 'alert', 'emergency'],
 ]);
 ```
 ## Versioning
-For transparency and insight into our release cycle and to maintain backward compatibility, 
+For transparency and insight into our release cycle and to maintain backward compatibility,
 *cakephp-entity-file-log* will be maintained under the [Semantic Versioning guidelines](http://semver.org).
