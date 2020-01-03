@@ -110,7 +110,7 @@ class EntityFileLog extends FileLog
      * @uses checkPermissionMask()
      * @uses getLogAsObject()
      */
-    public function log($level, $message, array $context = []): void
+    public function log($level, $message, array $context = [])
     {
         //First of all, it normally writes log
         parent::log($level, $message, $context);
