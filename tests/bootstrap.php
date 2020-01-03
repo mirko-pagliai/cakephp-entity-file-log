@@ -1,5 +1,6 @@
 <?php
 declare(strict_types=1);
+
 /**
  * This file is part of cakephp-entity-file-log.
  *
@@ -41,13 +42,10 @@ define('LOGS', TMP . 'logs' . DS);
 
 require_once CORE_PATH . 'config' . DS . 'bootstrap.php';
 
-<<<<<<< HEAD
 if (version_compare(Configure::version(), '3.6', '>=')) {
     error_reporting(E_ALL & ~E_USER_DEPRECATED);
 }
 
-=======
->>>>>>> develop
 date_default_timezone_set('UTC');
 mb_internal_encoding('UTF-8');
 
@@ -62,6 +60,6 @@ Configure::write('pluginsToLoad', ['EntityFileLog']);
 
 $_SERVER['PHP_SELF'] = '/';
 
-if (!class_exists('PHPUnit\Runner\Version')) {
-    class_alias('PHPUnit_Framework_Error_Warning', 'PHPUnit\Framework\Error\Warning');
+if (function_exists('loadPHPUnitAliases')) {
+    loadPHPUnitAliases();
 }
