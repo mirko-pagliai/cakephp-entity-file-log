@@ -1,5 +1,4 @@
 <?php
-declare(strict_types=1);
 
 /**
  * This file is part of cakephp-entity-file-log.
@@ -35,6 +34,7 @@ class EntityFileLogTest extends TestCase
 
     /**
      * Internal method to write some logs
+     * @return void
      */
     protected function writeSomeLogs()
     {
