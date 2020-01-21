@@ -1,5 +1,6 @@
 <?php
 declare(strict_types=1);
+
 /**
  * This file is part of cakephp-entity-file-log.
  *
@@ -17,14 +18,9 @@ use Cake\Log\Log;
 use EntityFileLog\Log\Engine\EntityFileLog;
 
 ini_set('intl.default_locale', 'en_US');
+date_default_timezone_set('UTC');
+mb_internal_encoding('UTF-8');
 
-require dirname(__DIR__) . '/vendor/autoload.php';
-
-if (!defined('DS')) {
-    define('DS', DIRECTORY_SEPARATOR);
-}
-
-// Path constants to a few helpful things.
 define('ROOT', dirname(__DIR__) . DS);
 define('CORE_PATH', ROOT . 'vendor' . DS . 'cakephp' . DS . 'cakephp' . DS);
 define('CAKE', CORE_PATH . 'src' . DS);
@@ -34,15 +30,12 @@ define('WWW_ROOT', APP . 'webroot' . DS);
 define('TMP', sys_get_temp_dir() . DS . 'cakephp-entity-log' . DS);
 define('CACHE', TMP . 'cache' . DS);
 define('LOGS', TMP . 'logs' . DS);
-
 @mkdir(TMP);
 @mkdir(CACHE);
 @mkdir(LOGS);
 
+require dirname(__DIR__) . '/vendor/autoload.php';
 require_once CORE_PATH . 'config' . DS . 'bootstrap.php';
-
-date_default_timezone_set('UTC');
-mb_internal_encoding('UTF-8');
 
 Log::setConfig('error', [
     'className' => EntityFileLog::class,
@@ -50,7 +43,6 @@ Log::setConfig('error', [
     'file' => 'error',
     'levels' => ['warning', 'error', 'critical', 'alert', 'emergency'],
 ]);
-
 Configure::write('pluginsToLoad', ['EntityFileLog']);
 
 $_SERVER['PHP_SELF'] = '/';
