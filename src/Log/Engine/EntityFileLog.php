@@ -1,5 +1,6 @@
 <?php
 declare(strict_types=1);
+
 /**
  * This file is part of cakephp-entity-file-log.
  *
@@ -30,7 +31,7 @@ class EntityFileLog extends FileLog
      * @param string $message The message you want to log
      * @return \Cake\ORM\Entity
      */
-    protected function getLogAsObject($level, $message)
+    protected function getLogAsObject(string $level, string $message): Entity
     {
         $log = new Entity();
         $log->set('level', $level);
@@ -89,9 +90,9 @@ class EntityFileLog extends FileLog
      * @param int $mask Mask
      * @return bool
      */
-    protected function checkPermissionMask($selfError, $exists, $pathname, $mask)
+    protected function checkPermissionMask(bool $selfError, bool $exists, string $pathname, int $mask): bool
     {
-        return !(!$selfError && !$exists && !chmod($pathname, (int)$mask));
+        return !(!$selfError && !$exists && !chmod($pathname, $mask));
     }
 
     /**
