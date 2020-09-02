@@ -1,5 +1,8 @@
 # 1.x branch
 ## 1.1 branch
+### 1.1.2
+* updated for `me-tools` 2.19.7 and `php-tools` 1.4.1.
+
 ### 1.1.1
 * little fixes.
 
