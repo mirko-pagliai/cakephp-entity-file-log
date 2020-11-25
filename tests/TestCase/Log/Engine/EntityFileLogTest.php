@@ -135,8 +135,8 @@ TRACE;
         }
 
         $this->skipIf(IS_WIN);
-        $this->assertFilePerms(['0644', '0664'], LOGS . 'error.log');
-        $this->assertFilePerms(['0644', '0664'], LOGS . 'error_serialized.log');
+        $this->assertFileIsReadable(LOGS . 'error.log');
+        $this->assertFileIsReadable(LOGS . 'error_serialized.log');
     }
 
     /**
@@ -157,7 +157,7 @@ TRACE;
         Log::setConfig('error', $oldConfig);
 
         $this->skipIf(IS_WIN);
-        $this->assertFilePerms('0777', LOGS . 'error.log');
-        $this->assertFilePerms('0777', LOGS . 'error_serialized.log');
+        $this->assertFileIsWritable(LOGS . 'error.log');
+        $this->assertFileIsWritable(LOGS . 'error_serialized.log');
     }
 }
