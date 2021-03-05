@@ -1,5 +1,5 @@
 parameters:
-    level: 6
+    level: 4
 
     paths:
         - src
@@ -20,7 +20,3 @@ parameters:
             message: '#^Closure invoked with 2 parameters, 0 required\.$#'
             count: 3
             path: tests/TestCase/Log/Engine/EntityFileLogTest.php
-
-        -
-            message: '# has no return typehint specified\.$#'
-            path: tests/TestCase
