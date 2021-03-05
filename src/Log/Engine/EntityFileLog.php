@@ -46,11 +46,7 @@ class EntityFileLog extends FileLog
         }
 
         //Sets the exception attributes
-        if (preg_match(
-            '/Exception Attributes:\s((.(?!Request URL|Referer URL|Client IP|Stack Trace|Trace))+)/is',
-            $message,
-            $matches
-        )) {
+        if (preg_match('/Exception Attributes:\s((.(?!Request URL|Referer URL|Client IP|Stack Trace|Trace))+)/is', $message, $matches )) {
             $log->set('attributes', $matches[1]);
         }
 
