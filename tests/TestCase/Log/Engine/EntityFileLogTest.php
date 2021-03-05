@@ -74,13 +74,13 @@ TRACE;
         $result = $getLogAsObjectMethod('error', 'example of message');
         $this->assertTrue($result->has(['level', 'datetime', 'message', 'full']));
         $this->assertEquals('error', $result->get('level'));
-        $this->assertRegExp('/^\d{4}\-\d{2}\-\d{2} \d{2}:\d{2}:\d{2}$/', $result->get('datetime'));
+        $this->assertMatchesRegularExpression('/^\d{4}\-\d{2}\-\d{2} \d{2}:\d{2}:\d{2}$/', $result->get('datetime'));
         $this->assertEquals('example of message', $result->get('message'));
 
         $result = $getLogAsObjectMethod('error', file_get_contents(TESTS . 'examples' . DS . 'stacktrace1'));
         $this->assertTrue($result->has(['level', 'datetime', 'exception', 'message', 'request', 'ip', 'trace', 'full']));
         $this->assertEquals('error', $result->get('level'));
-        $this->assertRegExp('/^\d{4}\-\d{2}\-\d{2} \d{2}:\d{2}:\d{2}$/', $result->get('datetime'));
+        $this->assertMatchesRegularExpression('/^\d{4}\-\d{2}\-\d{2} \d{2}:\d{2}:\d{2}$/', $result->get('datetime'));
         $this->assertEquals(MissingControllerException::class, $result->get('exception'));
         $this->assertEquals('Controller class NoExistingRoute could not be found.', $result->get('message'));
         $this->assertEquals('/noExistingRoute', $result->get('request'));
@@ -101,7 +101,7 @@ TRACE;
             'full',
         ]));
         $this->assertEquals('error', $result->get('level'));
-        $this->assertRegExp('/^\d{4}\-\d{2}\-\d{2} \d{2}:\d{2}:\d{2}$/', $result->get('datetime'));
+        $this->assertMatchesRegularExpression('/^\d{4}\-\d{2}\-\d{2} \d{2}:\d{2}:\d{2}$/', $result->get('datetime'));
         $this->assertEquals(MissingControllerException::class, $result->get('exception'));
         $this->assertEquals('Controller class NoExistingRoute could not be found.', $result->get('message'));
         $this->assertEquals($expectedAttributes, $result->get('attributes'));
@@ -129,9 +129,9 @@ TRACE;
         foreach ($logs as $log) {
             $this->assertInstanceOf(Entity::class, $log);
             $this->assertContains($log->get('level'), ['critical', 'error']);
-            $this->assertRegExp('/^\d{4}\-\d{2}\-\d{2} \d{2}:\d{2}:\d{2}$/', $log->get('datetime'));
-            $this->assertRegExp('/^This is (a critical|an error) message$/', $log->get('message'));
-            $this->assertRegExp('/^[\d\-:\s]{19} (Critical|Error)/', $log->get('full'));
+            $this->assertMatchesRegularExpression('/^\d{4}\-\d{2}\-\d{2} \d{2}:\d{2}:\d{2}$/', $log->get('datetime'));
+            $this->assertMatchesRegularExpression('/^This is (a critical|an error) message$/', $log->get('message'));
+            $this->assertMatchesRegularExpression('/^[\d\-:\s]{19} (Critical|Error)/', $log->get('full'));
         }
 
         $this->skipIf(IS_WIN);
