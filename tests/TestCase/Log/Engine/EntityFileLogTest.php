@@ -19,12 +19,15 @@ use Cake\ORM\Entity;
 use Cake\Routing\Exception\MissingControllerException;
 use EntityFileLog\Log\Engine\EntityFileLog;
 use MeTools\TestSuite\TestCase;
+use Tools\TestSuite\BackwardCompatibilityTrait;
 
 /**
  * EntityFileLogTest class
  */
 class EntityFileLogTest extends TestCase
 {
+    use BackwardCompatibilityTrait;
+    
     /**
      * Internal method to write some logs
      * @return void
