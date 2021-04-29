@@ -27,7 +27,7 @@ use Tools\TestSuite\BackwardCompatibilityTrait;
 class EntityFileLogTest extends TestCase
 {
     use BackwardCompatibilityTrait;
-    
+
     /**
      * Internal method to write some logs
      * @return void
