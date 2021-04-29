@@ -20,16 +20,6 @@ You can install the plugin via composer:
 ```bash
 $ composer require --prefer-dist mirko-pagliai/cakephp-entity-file-log
 ```
-**NOTE: the latest version available requires at least CakePHP 4**.
-
-Instead, the [cakephp3](//github.com/mirko-pagliai/cakephp-entity-file-log/tree/cakephp3)
-branch is compatible with all previous versions of CakePHP from version 3.2.
-This branch coincides with the current version of *cakephp-entity-file-log*.
-
-In this case, you can install the package as well:
-```bash
-    $ composer require --prefer-dist mirko-pagliai/cakephp-entity-file-log:dev-cakephp3
-```
 
 Then you have to load the plugin. For more information on how to load the plugin,
 please refer to the [Cookbook](//book.cakephp.org/4.0/en/plugins.html#loading-a-plugin).
@@ -39,6 +29,20 @@ Simply, you can execute the shell command to enable the plugin:
 bin/cake plugin load EntityFileLog
 ```
 This would update your application's bootstrap method.
+
+### Installation on older CakePHP and PHP versions
+Recent packages and the master branch require at least CakePHP 4.0 and PHP 7.2.
+Instead, the [cakephp3](//github.com/mirko-pagliai/cakephp-entity-file-log/tree/cakephp3) branch
+requires at least PHP 5.6.
+
+In this case, you can install the package as well:
+```bash
+$ composer require --prefer-dist mirko-pagliai/cakephp-entity-file-log:dev-cakephp3
+```
+
+Note that the `cakephp3` branch will no longer be updated as of April 29, 2021,
+except for security patches, and it matches the
+[1.1.3](//github.com/mirko-pagliai/cakephp-entity-file-log/releases/tag/1.1.3) version.
 
 ## How to use
 Simply, you have to use the `EntityFileLog\Log\Engine\EntityFileLog` class as a log adapter.
