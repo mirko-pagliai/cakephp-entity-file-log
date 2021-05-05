@@ -20,12 +20,9 @@ use Cake\Log\Log;
 use Cake\ORM\Entity;
 use Cake\Routing\Exception\MissingControllerException;
 use EntityFileLog\Log\Engine\EntityFileLog;
-use Tools\TestSuite\TestCase;
-use Tools\TestSuite\ReflectionTrait;
-use Tools\TestSuite\TestTrait;
-use Tools\TestSuite\BackwardCompatibilityTrait;
-use Tools\Filesystem;
 use Tools\Exceptionist;
+use Tools\Filesystem;
+use Tools\TestSuite\TestCase;
 
 /**
  * EntityFileLogTest class
