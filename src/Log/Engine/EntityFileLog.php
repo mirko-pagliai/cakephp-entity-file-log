@@ -34,8 +34,7 @@ class EntityFileLog extends FileLog
     protected function getLogAsObject(string $level, string $message): Entity
     {
         $log = new Entity();
-        $log->set('level', $level);
-        $log->set('datetime', date('Y-m-d H:i:s'));
+        $log->set('level', $level)->set('datetime', date('Y-m-d H:i:s'));
 
         //Sets exception type and message
         if (preg_match('/^(\[([^\]]+)\]\s)?(.+)/', $message, $matches)) {
@@ -47,11 +46,7 @@ class EntityFileLog extends FileLog
         }
 
         //Sets the exception attributes
-        if (preg_match(
-            '/Exception Attributes:\s((.(?!Request URL|Referer URL|Client IP|Stack Trace|Trace))+)/is',
-            $message,
-            $matches
-        )) {
+        if (preg_match('/Exception Attributes:\s((.(?!Request URL|Referer URL|Client IP|Stack Trace|Trace))+)/is', $message, $matches)) {
             $log->set('attributes', $matches[1]);
         }
 
@@ -102,7 +97,7 @@ class EntityFileLog extends FileLog
      *  `FileLog::log` method) and a serialized copy of the log.
      * For example, if the log is `error.log`, the serialized log will be
      *  `error_serialized.log`.
-     * @param string $level The severity level of the message being written.
+     * @param mixed $level The severity level of the message being written.
      *  See Cake\Log\Log::$_levels for list of possible levels.
      * @param string $message The message you want to log.
      * @param array $context Additional information about the logged message

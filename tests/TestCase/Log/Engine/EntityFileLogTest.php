@@ -19,12 +19,15 @@ use Cake\ORM\Entity;
 use Cake\Routing\Exception\MissingControllerException;
 use EntityFileLog\Log\Engine\EntityFileLog;
 use MeTools\TestSuite\TestCase;
+use Tools\TestSuite\BackwardCompatibilityTrait;
 
 /**
  * EntityFileLogTest class
  */
 class EntityFileLogTest extends TestCase
 {
+    use BackwardCompatibilityTrait;
+
     /**
      * Internal method to write some logs
      * @return void
@@ -74,13 +77,13 @@ TRACE;
         $result = $getLogAsObjectMethod('error', 'example of message');
         $this->assertTrue($result->has(['level', 'datetime', 'message', 'full']));
         $this->assertEquals('error', $result->get('level'));
-        $this->assertRegExp('/^\d{4}\-\d{2}\-\d{2} \d{2}:\d{2}:\d{2}$/', $result->get('datetime'));
+        $this->assertMatchesRegularExpression('/^\d{4}\-\d{2}\-\d{2} \d{2}:\d{2}:\d{2}$/', $result->get('datetime'));
         $this->assertEquals('example of message', $result->get('message'));
 
         $result = $getLogAsObjectMethod('error', file_get_contents(TESTS . 'examples' . DS . 'stacktrace1'));
         $this->assertTrue($result->has(['level', 'datetime', 'exception', 'message', 'request', 'ip', 'trace', 'full']));
         $this->assertEquals('error', $result->get('level'));
-        $this->assertRegExp('/^\d{4}\-\d{2}\-\d{2} \d{2}:\d{2}:\d{2}$/', $result->get('datetime'));
+        $this->assertMatchesRegularExpression('/^\d{4}\-\d{2}\-\d{2} \d{2}:\d{2}:\d{2}$/', $result->get('datetime'));
         $this->assertEquals(MissingControllerException::class, $result->get('exception'));
         $this->assertEquals('Controller class NoExistingRoute could not be found.', $result->get('message'));
         $this->assertEquals('/noExistingRoute', $result->get('request'));
@@ -101,7 +104,7 @@ TRACE;
             'full',
         ]));
         $this->assertEquals('error', $result->get('level'));
-        $this->assertRegExp('/^\d{4}\-\d{2}\-\d{2} \d{2}:\d{2}:\d{2}$/', $result->get('datetime'));
+        $this->assertMatchesRegularExpression('/^\d{4}\-\d{2}\-\d{2} \d{2}:\d{2}:\d{2}$/', $result->get('datetime'));
         $this->assertEquals(MissingControllerException::class, $result->get('exception'));
         $this->assertEquals('Controller class NoExistingRoute could not be found.', $result->get('message'));
         $this->assertEquals($expectedAttributes, $result->get('attributes'));
@@ -123,20 +126,20 @@ TRACE;
         $this->assertLogContains('Error: This is an error message', 'error.log');
         $this->assertLogContains('Critical: This is a critical message', 'error.log');
 
-        $logs = @unserialize(file_get_contents(LOGS . 'error_serialized.log'));
+        $logs = @unserialize(file_get_contents(LOGS . 'error_serialized.log') ?: '');
         $this->assertNotEmpty($logs);
 
         foreach ($logs as $log) {
             $this->assertInstanceOf(Entity::class, $log);
             $this->assertContains($log->get('level'), ['critical', 'error']);
-            $this->assertRegExp('/^\d{4}\-\d{2}\-\d{2} \d{2}:\d{2}:\d{2}$/', $log->get('datetime'));
-            $this->assertRegExp('/^This is (a critical|an error) message$/', $log->get('message'));
-            $this->assertRegExp('/^[\d\-:\s]{19} (Critical|Error)/', $log->get('full'));
+            $this->assertMatchesRegularExpression('/^\d{4}\-\d{2}\-\d{2} \d{2}:\d{2}:\d{2}$/', $log->get('datetime'));
+            $this->assertMatchesRegularExpression('/^This is (a critical|an error) message$/', $log->get('message'));
+            $this->assertMatchesRegularExpression('/^[\d\-:\s]{19} (Critical|Error)/', $log->get('full'));
         }
 
         $this->skipIf(IS_WIN);
-        $this->assertFilePerms(['0644', '0664'], LOGS . 'error.log');
-        $this->assertFilePerms(['0644', '0664'], LOGS . 'error_serialized.log');
+        $this->assertFileIsReadable(LOGS . 'error.log');
+        $this->assertFileIsReadable(LOGS . 'error_serialized.log');
     }
 
     /**
@@ -157,7 +160,7 @@ TRACE;
         Log::setConfig('error', $oldConfig);
 
         $this->skipIf(IS_WIN);
-        $this->assertFilePerms('0777', LOGS . 'error.log');
-        $this->assertFilePerms('0777', LOGS . 'error_serialized.log');
+        $this->assertFileIsWritable(LOGS . 'error.log');
+        $this->assertFileIsWritable(LOGS . 'error_serialized.log');
     }
 }

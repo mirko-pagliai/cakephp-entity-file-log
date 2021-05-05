@@ -1,5 +1,10 @@
 # 1.x branch
 ## 1.1 branch
+### 1.1.3
+* updated for `php-tools` 1.4.4;
+* ready for `php` 8;
+* added `phpstan`, so fixed some code.
+
 ### 1.1.2
 * updated for `me-tools` 2.19.7 and `php-tools` 1.4.1.
 
