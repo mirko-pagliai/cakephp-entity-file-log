@@ -178,7 +178,7 @@ TRACE;
         $this->assertLogContains('Error: This is an error message', 'error.log');
         $this->assertLogContains('Critical: This is a critical message', 'error.log');
 
-        $logs = @unserialize(file_get_contents(LOGS . 'error_serialized.log'));
+        $logs = @unserialize(file_get_contents(LOGS . 'error_serialized.log') ?: '');
         $this->assertNotEmpty($logs);
 
         foreach ($logs as $log) {
