@@ -1,9 +1,9 @@
 # cakephp-entity-file-log
 
 [![Software License](https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square)](LICENSE.txt)
-[![Build Status](https://travis-ci.org/mirko-pagliai/cakephp-entity-file-log.svg?branch=master)](https://travis-ci.org/mirko-pagliai/cakephp-entity-file-log)
-[![Build status](https://ci.appveyor.com/api/projects/status/rxadqjs0blb906jq?svg=true)](https://ci.appveyor.com/project/mirko-pagliai/cakephp-entity-file-log)
+[![CI](https://github.com/mirko-pagliai/cakephp-entity-file-log/actions/workflows/ci.yml/badge.svg)](https://github.com/mirko-pagliai/cakephp-entity-file-log/actions/workflows/ci.yml)
 [![codecov](https://codecov.io/gh/mirko-pagliai/cakephp-entity-file-log/branch/master/graph/badge.svg)](https://codecov.io/gh/mirko-pagliai/cakephp-entity-file-log)
+[![Codacy Badge](https://app.codacy.com/project/badge/Grade/21992b06c650403db8130997291fd485)](https://www.codacy.com/gh/mirko-pagliai/cakephp-entity-file-log/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=mirko-pagliai/cakephp-entity-file-log&amp;utm_campaign=Badge_Grade)
 [![CodeFactor](https://www.codefactor.io/repository/github/mirko-pagliai/cakephp-entity-file-log/badge)](https://www.codefactor.io/repository/github/mirko-pagliai/cakephp-entity-file-log)
 
 *cakephp-entity-file-log* is a CakePHP plugin that provides a log adapter that
